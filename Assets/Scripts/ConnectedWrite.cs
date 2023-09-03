@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ConnectedWrite : MonoBehaviour
 {
     //[SerializeField] private GameObject _nextWrite;
-    private bool _isActiveRed = false;
-    private bool _isCancelRed = false;
+    public bool _isActiveRed = false;
     private ReceivedSignalToWin _scriptForWin;
     private PistonWire _scriptPiston;
     private CommandBlock _scriptCommandBlock;
+    private enum GameState {startRed, endRed};
 
     private void Awake()
     {
@@ -22,29 +23,51 @@ public class ConnectedWrite : MonoBehaviour
         if (collider.gameObject.GetComponent<ConnectedWrite>())
         {
             if (_isActiveRed)
-                collider.gameObject.GetComponent<ConnectedWrite>().Invoke("ReceivedSignal", 0.3f);
-            else if (_isCancelRed)
-                collider.gameObject.GetComponent<ConnectedWrite>().CancelSignal();
+            {
+                StartCoroutine(IEStateSingal(collider));
+            }
+        }
+    }
+
+    private void SetGameState(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.startRed:
+                _isActiveRed = true;
+                break;
+            case GameState.endRed:
+                _isActiveRed = false;
+                break;
         }
     }
     public void ReceivedSignal()
     {
+        SetGameState(GameState.startRed);
         StartMechanism();
     }
     public void CancelSignal()
     {
-        _isActiveRed = false;
-        _isCancelRed = true;
         if (_scriptPiston) _scriptPiston.CancelSignal();
         else if (_scriptCommandBlock) _scriptCommandBlock.CancelSignal();
-        else gameObject.GetComponent<Renderer>().material.color = Color.white;
     }
+
     private void StartMechanism()
     {
-        _isActiveRed = true;
         if (_scriptPiston) _scriptPiston.ReceivedSignal();
         else if (_scriptCommandBlock) _scriptCommandBlock.ReceivedSignal();
         else if (_scriptForWin) _scriptForWin.ReceivedSignalForWin();
         else gameObject.GetComponent<Renderer>().material.color = Color.red;
+    }
+
+
+    IEnumerator IEStateSingal(Collider collider)
+    {
+        yield return new WaitForSeconds(0.3f);
+        if (!collider.gameObject.GetComponent<ConnectedWrite>()._isActiveRed)
+        {
+            if (_isActiveRed) collider.gameObject.GetComponent<ConnectedWrite>().ReceivedSignal();
+        }
+        yield break;
     }
 }

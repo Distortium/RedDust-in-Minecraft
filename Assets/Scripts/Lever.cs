@@ -1,12 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Lever : MonoBehaviour
 {
     private List<Collider> _sendSignal = new List<Collider>();
     private bool _isActiveted = false;
+    private AudioSource _audioSource;
+
+    private void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        SoundsManager.CheckMuteSounds(_audioSource);
+    }
 
     private void OnTriggerStay(Collider collider)
     {
@@ -17,12 +22,13 @@ public class Lever : MonoBehaviour
     }
     private void OnMouseDown()
     {
+        _audioSource.Play();
         _isActiveted = !_isActiveted;
         if (_isActiveted)
         {
             foreach (Collider item in _sendSignal)
             {
-                item.GetComponent<ConnectedWrite>().ReceivedSignal();
+                item.gameObject.GetComponent<ConnectedWrite>().ReceivedSignal();
             }
             foreach (Transform child in transform)
             {
@@ -34,7 +40,7 @@ public class Lever : MonoBehaviour
         {
             foreach (Collider item in _sendSignal)
             {
-                item.GetComponent<ConnectedWrite>().CancelSignal();
+                item.gameObject.GetComponent<ConnectedWrite>().CancelSignal();
             }
             foreach (Transform child in transform)
             {

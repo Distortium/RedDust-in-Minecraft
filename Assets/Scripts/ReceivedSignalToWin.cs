@@ -1,19 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ReceivedSignalToWin : MonoBehaviour
 {
-    //[SerializeField] private Texture _disableRedstoneLamp, _activeRedstoneLamp;
-    //private Renderer _Renderer;
+    public bool _isWin { get; private set; }
+    private AudioSource _audioSource;
 
     private void Start()
     {
-        //_Renderer = GetComponent<Renderer>();
+        _isWin = false;
+        _audioSource = GetComponent<AudioSource>();
+        SoundsManager.CheckMuteSounds(_audioSource);
     }
     public void ReceivedSignalForWin()
     {
-        //_Renderer.material.SetTexture("_MainTex", _activeRedstoneLamp);
+        gameObject.GetComponentInParent<Map>().LevelWin();
+        _audioSource.Play();
         print("Победа");
+    }
+
+    public void CancelSignal()
+    {
+        _isWin = false;
     }
 }
