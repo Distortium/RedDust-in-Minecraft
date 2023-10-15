@@ -7,6 +7,8 @@ public class ChoiceLevel : MonoBehaviour
     [SerializeField] private Image _imageStar;
     [SerializeField] private Sprite _spriteActiveStar;
     [SerializeField] private StartingMenu _gameManagerObject;
+    private bool _findActivetedLevel = false;
+    private bool _findActivetedButton = false;
 
     private void OnEnable()
     {
@@ -14,13 +16,21 @@ public class ChoiceLevel : MonoBehaviour
         string[] _allLevelsInString = EndLevel.AllLevels.Split('#');
         foreach (string itemLevel in _allLevelsInString)
         {
-            if (EndLevel.AllLevels == "") break;
-            else if (int.Parse(itemLevel) == _indexLevel)
+            if (itemLevel == "") break;
+            if (int.Parse(itemLevel) == _indexLevel)
             {
                 _isTryLevel = false;
-                break;
+                _findActivetedLevel = true;
             }
-            else _isTryLevel = true;
+            else if (!_findActivetedLevel) _isTryLevel = true;
+            int _prevIndexLevel = _indexLevel;
+            _prevIndexLevel--;
+            if (int.Parse(itemLevel) == _prevIndexLevel)
+            {
+                gameObject.GetComponent<Button>().interactable = true;
+                _findActivetedButton = true;
+            }
+            else if (!_findActivetedButton) gameObject.GetComponent<Button>().interactable = false;
         }
         if (!_isTryLevel)
         {

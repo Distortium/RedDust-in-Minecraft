@@ -62,6 +62,10 @@ public class StartingMenu : MonoBehaviour
             case 3:
                 YandexGame.ReviewShow(true);
                 break;
+            // Удалить пройденный этап
+            case 4:
+                YandexGame.ResetSaveProgress();
+                break;
         }
     }
 

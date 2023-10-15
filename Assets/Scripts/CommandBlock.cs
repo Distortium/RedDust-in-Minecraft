@@ -25,7 +25,7 @@ public class CommandBlock : MonoBehaviour
         if (!_object)
         {
             _audioSource.Play();
-            _object = Instantiate(_spawnObject, _spawnPos.position, Quaternion.identity);
+            _object = Instantiate(_spawnObject, _spawnPos.position, Quaternion.identity, _spawnPos);
             _Renderer.material.SetTexture("_MainTex", _activeRedstoneLamp);
         }
     }

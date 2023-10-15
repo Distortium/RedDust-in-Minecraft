@@ -5,7 +5,7 @@ using YG;
 public class EndLevel : MonoBehaviour
 {
     static private GameObject _thisMenu;
-    static public string AllLevels = "";
+    static public string AllLevels = "0#";
     [SerializeField] private StartingMenu _startMenu;
     [SerializeField] private SaveGame _savingGame;
     [SerializeField] private Text _textEntryMoney;

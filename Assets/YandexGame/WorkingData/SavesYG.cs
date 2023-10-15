@@ -16,7 +16,7 @@ namespace YG
         // Ваши сохранения
 
         public int money = 0;
-        public string levels = "";
+        public string levels = "0#";
         public string buyItem = "0#";
 
         // Поля (сохранения) можно удалять и создавать новые. При обновлении игры сохранения ломаться не должны
