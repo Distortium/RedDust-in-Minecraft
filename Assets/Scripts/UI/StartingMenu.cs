@@ -60,7 +60,7 @@ public class StartingMenu : MonoBehaviour
                 break;
             // ќценить игру
             case 3:
-                YandexGame.ReviewShow(true);
+                YandexGame.ReviewShow(false);
                 break;
             // ”далить пройденный этап
             case 4:
